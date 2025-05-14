@@ -42,7 +42,7 @@ public class PlayerManager : MonoBehaviour
             _xRotate -= Input.GetAxis("Mouse Y") * rotateSpeed * Time.deltaTime;
             _xRotate = Mathf.Clamp( _xRotate, _minVerticalAngle, _maxVerticalAngle);
 
-            _camera.transform.localEulerAngles = new Vector3( _xRotate, 0,0 );
+            _camera.transform.localEulerAngles = new Vector3(_xRotate, 0, 0);
         }
 
         float turbo = Input.GetKey(KeyCode.LeftShift) ? 2 :1 ;
@@ -57,5 +57,7 @@ public class PlayerManager : MonoBehaviour
         realForward = Vector3.ClampMagnitude(realForward, 1);
 
         _mCharacterController.SimpleMove(realForward * curSpeed);
+
+        playerAnimator.SetFloat(Speed, curSpeed);
     }
 }
