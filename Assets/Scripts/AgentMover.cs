@@ -10,7 +10,7 @@ public class AgentMover : MonoBehaviour
 
     [SerializeField] LayerMask mask;
 
-    private int index = 0;
+    //private int index = 0;
 
     [SerializeField] private Animator _animator;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
