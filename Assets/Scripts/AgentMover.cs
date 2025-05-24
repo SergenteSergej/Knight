@@ -4,50 +4,55 @@ using UnityEngine.AI;
 public class AgentMover : MonoBehaviour
 {
     private static readonly int Speed = Animator.StringToHash("Speed");
-    private static readonly int Strafe = Animator.StringToHash("Strafe");
-
     private NavMeshAgent _agent;
 
-    [SerializeField] private Animator _animator;
-    [SerializeField] private LayerMask mask;
+    //[SerializeField] Transform[] targets;
 
+    [SerializeField] LayerMask mask;
+
+    //private int index = 0;
+
+    [SerializeField] private Animator _animator;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
+
+        //_agent.SetDestination(targets[index].position);
     }
 
     void Update()
     {
-        HandleClickMovement();
-        HandleAnimation();
-    }
-
-    private void HandleClickMovement()
-    {
         if (Input.GetMouseButton(0))
         {
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100, mask))
+            RaycastHit hit;
+
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
             {
                 _agent.destination = hit.point;
             }
         }
-    }
 
-    private void HandleAnimation()
-    {
+        float normalizeSpeed = _agent.velocity.magnitude / _agent.speed;
+
         if (_agent.hasPath)
         {
-            Vector3 localVelocity = transform.InverseTransformDirection(_agent.velocity);
-            float forwardSpeed = localVelocity.z / _agent.speed;
-            float strafeSpeed = localVelocity.x / _agent.speed;
-
-            _animator.SetFloat(Speed, forwardSpeed);
-            _animator.SetFloat(Strafe, strafeSpeed);
+            _animator.SetFloat(Speed, normalizeSpeed);
         }
         else
         {
             _animator.SetFloat(Speed, 0);
-            _animator.SetFloat(Strafe, 0);
         }
+
+        /*if (_agent.remainingDistance <= 0.1f)
+        {
+            index++;
+            if (index >= targets.Length)
+            {
+                index = 0;
+            }
+            _agent.SetDestination(targets[index].position);
+        }*/
     }
 }
